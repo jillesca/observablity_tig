@@ -41,6 +41,8 @@ services:
     container_name: telegraf
     ports:
       - "57500:57500"
+    cap_add:
+      - NET_RAW
 
 volumes:
   influxdb:

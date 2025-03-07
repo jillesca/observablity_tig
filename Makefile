@@ -2,17 +2,21 @@ include .env.example
 -include .env
 export
 
+
+# Check if docker is available, otherwise use podman
+DOCKER := $(shell command -v docker 2> /dev/null || echo podman)
+
 build-tig:
 	$(MAKE) clean-tig
-	docker compose up --build --detach telegraf influxdb grafana
+	$(DOCKER) compose up --build --detach telegraf influxdb grafana
 
 run-tig:
 	$(MAKE) clean-tig
-	docker compose up --detach telegraf influxdb grafana
+	$(DOCKER) compose up --detach telegraf influxdb grafana
 
 follow:
-	docker compose logs --follow
+	$(DOCKER) compose logs --follow
 
 clean-tig:
-	-docker compose down telegraf influxdb grafana
-	-docker compose rm -f telegraf influxdb grafana
+	-$(DOCKER) compose down telegraf influxdb grafana
+	-$(DOCKER) compose rm -f telegraf influxdb grafana
